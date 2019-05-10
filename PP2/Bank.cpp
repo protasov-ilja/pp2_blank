@@ -49,7 +49,7 @@ void CBank::SetTotalBalance(int value)
 
 void CBank::SomeLongOperations()
 {
-	// TODO
+	Sleep(1000);
 }
 
 int CBank::GetTotalBalance() const

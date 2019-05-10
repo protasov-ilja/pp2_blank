@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 
+#include <windows.h>
 #include "BankClient.h"
 
 class CBank
