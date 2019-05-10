@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "BankClient.h"
 
@@ -10,12 +11,16 @@ public:
 	CBank();
 	CBankClient* CreateClient();
 	void UpdateClientBalance(CBankClient& client, int value);
+	int GetTotalBalance() const;
+	int GetClinetsTotalBalance() const;
+	std::vector<CBankClient> GetClients() const;
+	int GetClinetBalanceById(unsigned clientId);
 
 private:
-	std::vector<CBankClient> m_clients;
-	int m_totalBalance;
-
-	int GetTotalBalance();
 	void SetTotalBalance(int value);
 	void SomeLongOperations();
+
+	std::vector<CBankClient> m_clients;
+	std::map<unsigned, int> m_clientsBalance;
+	int m_totalBalance;
 };

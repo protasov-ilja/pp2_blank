@@ -6,23 +6,27 @@ CBank::CBank()
 	m_totalBalance = 0;
 }
 
-
 CBankClient* CBank::CreateClient()
 {
 	unsigned clientId = unsigned(m_clients.size());
+
 	CBankClient* client = new CBankClient(this, clientId);
+	std::cout << "Client " << (*client).GetId() << std::endl;
 	m_clients.push_back(*client);
+	m_clientsBalance.insert(std::pair<char, int>((*client).GetId(), 0));
+
 	return client;
 }
 
-
-void CBank::UpdateClientBalance(CBankClient &client, int value)
+void CBank::UpdateClientBalance(CBankClient& client, int value)
 {
 	int totalBalance = GetTotalBalance();
-	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
-	
+	std::cout << "Client " << client.GetId()
+			  << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
+
 	SomeLongOperations();
 	totalBalance += value;
+	m_clientsBalance[client.GetId()] += value;
 
 	std::cout
 		<< "Client " << client.GetId() << " updates his balance with " << value
@@ -30,19 +34,13 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
 
 	// Check correctness of transaction through actual total balance
-	if (totalBalance != GetTotalBalance() + value) {
+	if (totalBalance != GetTotalBalance() + value)
+	{
 		std::cout << "! ERROR !" << std::endl;
 	}
 
 	SetTotalBalance(totalBalance);
 }
-
-
-int CBank::GetTotalBalance()
-{
-	return m_totalBalance;
-}
-
 
 void CBank::SetTotalBalance(int value)
 {
@@ -52,4 +50,30 @@ void CBank::SetTotalBalance(int value)
 void CBank::SomeLongOperations()
 {
 	// TODO
+}
+
+int CBank::GetTotalBalance() const
+{
+	return m_totalBalance;
+}
+
+int CBank::GetClinetsTotalBalance() const
+{
+	int totalBalance = 0;
+	for (auto it = m_clientsBalance.begin(); it != m_clientsBalance.end(); ++it)
+	{
+		totalBalance += it->second;
+	}
+
+	return totalBalance;
+}
+
+std::vector<CBankClient> CBank::GetClients() const
+{
+	return m_clients;
+}
+
+int CBank::GetClinetBalanceById(unsigned clientId)
+{
+	return m_clientsBalance[clientId];
 }
